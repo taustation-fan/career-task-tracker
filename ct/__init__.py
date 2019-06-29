@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from ct.model import db, Character, Token, TaskReading
+from ct.model import db, Character, Token, CareerTask, BatchSubmission, TaskReading
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
@@ -16,12 +16,27 @@ def add_entry():
     station = payload['station']
 
     token = Token.query.filter_by(token=token_str).one()
+    batch = BatchSubmission(
+        token=token,
+        character=token.character,
+        station=station,
+        career=payload['career'],
+        rank=payload['rank'],
+    )
+    db.session.add(batch)
+
     for task, bonus in payload['tasks'].items():
+        career_task = CareerTask.query.filter_by(name=task).first()
+        if career_task is None:
+            career_task = CareerTask(
+                name=task,
+                career=payload['career'],
+            )
+            db.session.add(career_task)
+            
         db.session.add(TaskReading(
-            token=token,
-            character=token.character,
-            station=station,
-            task=task,
+            batch_submission=batch,
+            career_task=career_task,
             bonus=bonus,
         ))
   

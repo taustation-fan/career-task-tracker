@@ -10,7 +10,10 @@ with app.app_context():
     character = Character(name=name)
     db.session.add(character)
 
-    token_str = secrets.token_hex()
+    try:
+        token_str = sys.argv[2]
+    except IndexError:
+        token_str = secrets.token_hex()
     token = Token(character=character, token=token_str)
     db.session.add(token)
     db.session.commit()
