@@ -1,13 +1,19 @@
 from datetime import datetime
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from ct.model import db, Character, Token, CareerTask, BatchSubmission, TaskReading
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+def make_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    CORS(app)
+    return app
+
+app = make_app()
 
 @app.route('/v1/add', methods=['POST'])
 def add_entry():
@@ -45,7 +51,7 @@ def add_entry():
 
 @app.route('/v1/stations')
 def list_stations():
-    records = db.session.query(TaskReading.station).distinct().all()
+    records = db.session.query(BatchSubmission.station).distinct().all()
     stations = [r[0] for r in records]
     return jsonify({'data': stations})
 
