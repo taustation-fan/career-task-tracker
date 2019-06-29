@@ -23,7 +23,7 @@ As a user, you need to follow the following steps to submit data to the career t
 
 * Install a browser extension that allows you to run userscripts, for example [Tampermonkey](https://www.tampermonkey.net/) or [Greasemonkey](https://www.greasespot.net/).
 * Request an access token from [moritz via in-game mail](https://alpha.taustation.space/email/write/moritz)
-* Install the `career_task_tracker.user.js` userscript (TODO: add link)
+* Install the [`career_task_tracker.user.js` userscript](https://github.com/taustation-fan/career-task-tracker/raw/master/career_task_tracker.user.js).
 * Navigate to [Preferences](https://alpha.taustation.space/preferences) and enter your access token under *UserScript: Career Task Tracker*.
 
 After this setup, you'll automatically submit career task data when you
