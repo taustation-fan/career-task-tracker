@@ -31,4 +31,20 @@ view the [list of career tasks](https://alpha.taustation.space/career).
 
 ## Development
 
-TODO
+The server component of the career task tracker is a Python 3.6+ application
+built on Flask and the SQLAlchemy ORM.
+
+To create a development environment, you need to have Python 3.6
+available, and the `virtualenv` package. Execute the command
+
+    $ ./setup-venv.sh
+
+(once) followed by `source venv/bin/activate` (each time you open a new shell/terminal window). To exit the development environment, use the `deactivate` command.
+
+You can then start the application in development mode with the commands
+
+    $ python createuser.py testuser
+    $ python -m ctt
+
+The development server uses an sqlite database in `/tmp/test.db`,
+and starts on localhost port 5000.
