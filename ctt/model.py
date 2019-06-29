@@ -30,6 +30,7 @@ class CareerTask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), unique=True, nullable=False)
     career = db.Column(db.String(250))
+    bonus_baseline = db.Column(db.Float())
 
 class TaskReading(db.Model):
     id = db.Column(db.Integer, primary_key=True)

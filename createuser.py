@@ -1,7 +1,7 @@
 import secrets
 import sys
 
-from ct import app, db, Character, Token
+from ctt import app, db, Character, Token
 
 name = sys.argv[1]
 

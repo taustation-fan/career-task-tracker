@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from ct.model import db, Character, Token, CareerTask, BatchSubmission, TaskReading
+from ctt.model import db, Character, Token, CareerTask, BatchSubmission, TaskReading
 
 def make_app():
     app = Flask(__name__)
