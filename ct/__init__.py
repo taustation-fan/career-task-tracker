@@ -17,7 +17,7 @@ app = make_app()
 
 @app.route('/v1/add', methods=['POST'])
 def add_entry():
-    payload = request.json
+    payload = request.get_json(force=True)
     token_str = payload['token']
     station = payload['station']
 
