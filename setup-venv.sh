@@ -10,4 +10,3 @@ pip install ipython
 echo ""
 echo "Your development environment is ready to roll!"
 echo "To use it, run 'source venv/bin/activate' in your shell."
-echo "To start the app, run 'python -m cct'."

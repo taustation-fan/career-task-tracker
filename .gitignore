@@ -1,3 +1,6 @@
 __pycache__/
 *.swp
+*.pyc
 venv
+ctt.egg-info/
+dist/
