@@ -65,7 +65,7 @@
 
     $.ajax({
         type: "POST",
-        url: 'http://127.0.0.1:5000/v1/add',
+        url: 'https://ctt.tauguide.de/v1/add',
         dataType: 'json',
         data: JSON.stringify(payload),
     });
