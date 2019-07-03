@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from ctt.model import db, Character, Token, CareerTask, BatchSubmission, TaskReading
 
 def make_app():
@@ -55,6 +56,14 @@ def list_stations():
     stations = [r[0] for r in records]
     return jsonify({'data': stations})
 
+@app.route('/v1/stats-by-character')
+def stats_by_player():
+    results = db.session.query(Character.name, func.count(BatchSubmission.id)) \
+              .join(Character).group_by(Character.name).all()
+    by_player = {}
+    for r in results:
+        by_player[r[0]] = r[1]
+    return jsonify({'data': by_player})
 
 if __name__ == '__main__':
     app.run(debug=True)
