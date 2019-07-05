@@ -19,6 +19,10 @@ app = make_app()
 @app.route('/v1/add', methods=['POST'])
 def add_entry():
     payload = request.get_json(force=True)
+    missing_attrs = [a for a in ('token', 'station', 'career', 'rank', 'tasks') if not payload.get(a)]
+    if missing_attrs:
+        return jsonify({'recorded': False, 'missing': missing_attrs})
+
     token_str = payload['token']
     station = payload['station']
 
@@ -48,7 +52,7 @@ def add_entry():
         ))
   
     db.session.commit()
-    return jsonify({'character': token.character.name})
+    return jsonify({'character': token.character.name, 'recorded': True})
 
 @app.route('/v1/stations')
 def list_stations():
