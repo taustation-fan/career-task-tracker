@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from flask import Flask, request, jsonify
@@ -8,7 +9,7 @@ from ctt.model import db, Character, Token, CareerTask, BatchSubmission, TaskRea
 
 def make_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.environ.get('CTT_DB', '/tmp/test.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     CORS(app)
