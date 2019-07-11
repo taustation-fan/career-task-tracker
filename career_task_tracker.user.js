@@ -72,16 +72,23 @@
         tasks: tasks,
     };
 
+    let url = 'https://ctt.tauguide.de/v1/add';
+
     $.ajax({
         type: "POST",
-        url: 'https://ctt.tauguide.de/v1/add',
+        url: url,
         dataType: 'json',
         data: JSON.stringify(payload),
         success: function(response) {
             if (response.recorded) {
-                status_message('tasks successfully recorded. +1 brownie point!')
+                status_message('tasks successfully recorded. +1 brownie point!');
             }
-
+            else {
+                status_message('error recording tasks: ' + response.message);
+            }
+        },
+        error: function(xhr) {
+            status_message('cannot talk to ' + url + ': ' + xhr.response_text);
         },
     });
 }());
