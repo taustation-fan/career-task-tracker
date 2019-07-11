@@ -22,12 +22,15 @@ def add_entry():
     payload = request.get_json(force=True)
     missing_attrs = [a for a in ('token', 'station', 'career', 'rank', 'tasks') if not payload.get(a)]
     if missing_attrs:
-        return jsonify({'recorded': False, 'missing': missing_attrs})
+        message = 'Missing attributes: '  + ', '.join(missing_attrs)
+        return jsonify({'recorded': False, 'missing': missing_attrs, message: message})
 
     token_str = payload['token']
     station = payload['station']
 
-    token = Token.query.filter_by(token=token_str).one()
+    token = Token.query.filter_by(token=token_str).first()
+    if token is None:
+        return jsonify({'recorded': False, 'message': 'Invalid token'})
     batch = BatchSubmission(
         token=token,
         character=token.character,
