@@ -13,6 +13,11 @@
 
 (function() {
     'use strict';
+    function status_message(message) {
+        $('p#ctt_msg').remove();
+        $('div.career-task-container').after('<p id="ctt_msg">Career task tracker: ' + message + '</p>')
+    }
+
     function pref_specs() {
         return {
             key: 'career_tracker',
@@ -35,7 +40,7 @@
     }
     var token = options.token;
     if (!token) {
-        alert('Please configure your access token in the user preferences');
+        status_message('Please configure your access token in the user preferences');
         return;
     }
 
@@ -54,6 +59,10 @@
             tasks[name] = amount;
         });
     });
+    if ($.isEmptyObject(tasks)) {
+        status_message('No career tasks found');
+        return;
+    }
 
     var payload = {
         token: token,
@@ -68,5 +77,11 @@
         url: 'https://ctt.tauguide.de/v1/add',
         dataType: 'json',
         data: JSON.stringify(payload),
+        success: function(response) {
+            if (response.recorded) {
+                status_message('tasks successfully recorded. +1 brownie point!')
+            }
+
+        },
     });
 }());
