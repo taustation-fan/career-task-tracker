@@ -48,3 +48,5 @@ You can then start the application in development mode with the commands
 
 The development server uses an sqlite database in `/tmp/test.db`,
 and starts on localhost port 5000.
+
+The HTTP API endpoints are documented in [API.md](API.md).
