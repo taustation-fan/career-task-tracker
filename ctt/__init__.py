@@ -60,7 +60,7 @@ def add_entry():
 
 @app.route('/v1/stations')
 def list_stations():
-    records = db.session.query(BatchSubmission.station).distinct().all()
+    records = db.session.query(BatchSubmission.station).order_by(BatchSubmission.station).distinct().all()
     stations = [r[0] for r in records]
     return jsonify({'data': stations})
 
@@ -72,6 +72,20 @@ def stats_by_player():
     for r in results:
         by_player[r[0]] = r[1]
     return jsonify({'data': by_player})
+
+@app.route('/v1/station-needs-update/<station>')
+def station_needs_update(station):
+    newest = BatchSubmission.query.filter_by(station=station) \
+             .order_by(BatchSubmission.when.desc()).first()
+    
+    if newest is None:
+        result = True
+    else:
+        delta = datetime.now() - newest.when
+        print(delta)
+        result = delta.total_seconds() > 6 * 3600
+
+    return jsonify({'needs_update': result})
 
 if __name__ == '__main__':
     app.run(debug=True)
