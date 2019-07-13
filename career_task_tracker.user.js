@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         career_task_tracker
-// @version      1.5
+// @version      1.6
 // @author       Moritz Lenz <moritz.lenz@gmail.com>
 // @description  Submit current career task rewards to a central collector. Please get an access token from moritz and add it in your preferences page.
 // @match        https://alpha.taustation.space/
@@ -44,8 +44,10 @@
     }
 
     var station = get_station();
+    // must always be called, otherwise preference editing breaks
+    let options = userscript_preferences( pref_specs() );
+
     if (station && window.location.pathname.match('^/career')) {
-        let options = userscript_preferences( pref_specs() );
 
         if ( !window.location.pathname.match('^/career') ) {
             return;
