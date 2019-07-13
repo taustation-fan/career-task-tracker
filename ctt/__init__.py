@@ -41,13 +41,17 @@ def add_entry():
     db.session.add(batch)
 
     for task, bonus in payload['tasks'].items():
+        bonus = float(bonus)
         career_task = CareerTask.query.filter_by(name=task).first()
         if career_task is None:
             career_task = CareerTask(
                 name=task,
                 career=payload['career'],
+                bonus_baseline=bonus,
             )
             db.session.add(career_task)
+        elif career_task.bonus_baseline is None or career_task.bonus_baseline > bonus:
+            career_task.bonus_baseline = bonus
             
         db.session.add(TaskReading(
             batch_submission=batch,
