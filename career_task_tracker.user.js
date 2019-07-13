@@ -96,7 +96,7 @@
                 if (response.recorded) {
                     let message = 'tasks successfully recorded. +1 brownie point!';
                     if (response.factor) {
-                        message += " Current factor: " + format_float(response.factor);
+                        message += " Current factor: " + format_float(response.factor) + '. ';
                     }
                     if (response.system_factors) {
                         let thead = '<thead><tr><th>Station</th><th>Factor</th></tr></thead>';
@@ -113,6 +113,9 @@
                         let table = '<table>' + thead + '<tbody>' + body + '</tbody></table>';
                         console.log(table);
                         message += '</p><p>Other stations in this system:</p>' + table;
+                    }
+                    else {
+                        message += 'No data from other stations in this system is available right now.';
                     }
                     status_message(message);
                 }
