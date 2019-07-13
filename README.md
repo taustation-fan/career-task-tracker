@@ -10,7 +10,7 @@ A [game update in June 2019](https://blog.taustation.space/blog/update-changelog
 It seems there is a baseline bonus (9 credits for the lowest-paying task of most careers), and an additional factor between 1 and 2 that varies by station and time. The variation is on the order of hours to days.
 
 This repository provides tooling to automatically record career task bonuses
-during normal game play, conforming to the [Tau Station Terms of Service](https://alpha.taustation.space/terms).
+during normal game play, conforming to the [Tau Station Terms of Service](https://alpha.taustation.space/terms). In addition, it shows you the factors of other stations within the same system, provided up-to-date data is available.
 
 After an [initial setup](#setup), simply navigate to the [list of career tasks](https://alpha.taustation.space/career). A userscript automatically extracts data from this page and submits it to a central server.
 
