@@ -69,7 +69,6 @@ def add_entry():
     response['factor'] = max(factors)
     factors = {}
     if ', ' in station:
-        print('trying to add more data')
         local_station, system = station.split(', ', 2)
         date_limit = datetime.now() - timedelta(hours=6)
         stations = db.session.query(BatchSubmission.station).filter(
@@ -83,7 +82,8 @@ def add_entry():
             factor = max(o.factor for o in bs.readings)
             st = st.split(', ')[0]
             factors[st] = factor
-    response['system_factors'] = factors
+    if factors:
+        response['system_factors'] = factors
   
     db.session.commit()
 
@@ -113,7 +113,6 @@ def station_needs_update(station):
         result = True
     else:
         delta = datetime.now() - newest.when
-        print(delta)
         result = delta.total_seconds() > 6 * 3600
 
     return jsonify({'needs_update': result})

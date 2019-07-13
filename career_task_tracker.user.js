@@ -17,7 +17,13 @@
         $('p#ctt_msg').remove();
         $('div.career-task-container').after('<p id="ctt_msg">Career task tracker: ' + message + '</p>')
     }
-
+    function format_float(f) {
+        f = '' + f;   // convert to string
+        if (f.length > 5) {
+            f = f.substr(0, 5);
+        }
+        return f
+    }
     function get_station() {
         return $('span.station').text().trim();
     }
@@ -88,7 +94,23 @@
                 if (response.recorded) {
                     let message = 'tasks successfully recorded. +1 brownie point!';
                     if (response.factor) {
-                        message += " Current factor: " + response.factor
+                        message += " Current factor: " + format_float(response.factor);
+                    }
+                    if (response.system_factors) {
+                        let thead = '<thead><tr><th>Station</th><th>Factor</th></tr></thead>';
+                        let keys = Object.keys(response.system_factors).sort();
+                        let body = '';
+                        for (let i = 0; i < keys.length; i++) {
+                            let factor = response.system_factors[keys[i]];
+                            let station = keys[i];
+                            if (factor > 1.0 ) {
+                                station = '<strong>' + station + '</strong>';
+                            }
+                            body += '<tr><td>' + station + '</td><td>' + format_float(factor)  + '</td></tr>\n';
+                        }
+                        let table = '<table>' + thead + '<tbody>' + body + '</tbody></table>';
+                        console.log(table);
+                        message += '</p><p>Other stations in this system:</p>' + table;
                     }
                     status_message(message);
                 }
