@@ -26,6 +26,7 @@ In case of success, it returns a payload like this:
 
     {
         "character": "moritz",
+        "factor": 1.0,
         "recorded": true
     }
 

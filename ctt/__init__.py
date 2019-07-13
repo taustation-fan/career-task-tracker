@@ -40,6 +40,8 @@ def add_entry():
     )
     db.session.add(batch)
 
+    factors = []
+
     for task, bonus in payload['tasks'].items():
         bonus = float(bonus)
         career_task = CareerTask.query.filter_by(name=task).first()
@@ -53,14 +55,16 @@ def add_entry():
         elif career_task.bonus_baseline is None or career_task.bonus_baseline > bonus:
             career_task.bonus_baseline = bonus
             
-        db.session.add(TaskReading(
+        tr = TaskReading(
             batch_submission=batch,
             career_task=career_task,
             bonus=bonus,
-        ))
+        )
+        db.session.add(tr)
+        factors.append(tr.factor)
   
     db.session.commit()
-    return jsonify({'character': token.character.name, 'recorded': True})
+    return jsonify({'character': token.character.name, 'recorded': True, 'factor': max(factors)})
 
 @app.route('/v1/stations')
 def list_stations():
