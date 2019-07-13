@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         career_task_tracker
-// @version      1.2
+// @version      1.3
 // @author       Moritz Lenz <moritz.lenz@gmail.com>
 // @description  Submit current career task rewards to a central collector. Please get an access token from moritz and add it in your preferences page.
 // @match        https://alpha.taustation.space/
@@ -86,7 +86,11 @@
             data: JSON.stringify(payload),
             success: function(response) {
                 if (response.recorded) {
-                    status_message('tasks successfully recorded. +1 brownie point!');
+                    let message = 'tasks successfully recorded. +1 brownie point!';
+                    if (response.factor) {
+                        message += " Current factor: " + response.factor
+                    }
+                    status_message(message);
                 }
                 else {
                     status_message('error recording tasks: ' + response.message);
@@ -102,7 +106,7 @@
         console.log('getting ' + url);
         $.get(url, function (response) {
             console.log('Response: ', response);
-            if (respones.needs_update) {
+            if (response.needs_update) {
                 $('span.employment-title:contains(Career)').parent().append('– <a href="/career">Check tasks</a>');
             }
         });
