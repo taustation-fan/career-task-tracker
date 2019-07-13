@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -40,6 +40,8 @@ def add_entry():
     )
     db.session.add(batch)
 
+    response = {'character': token.character.name}
+
     factors = []
 
     for task, bonus in payload['tasks'].items():
@@ -62,9 +64,30 @@ def add_entry():
         )
         db.session.add(tr)
         factors.append(tr.factor)
+
+    response['recorded'] = True
+    response['factor'] = max(factors)
+    factors = {}
+    if ', ' in station:
+        print('trying to add more data')
+        local_station, system = station.split(', ', 2)
+        date_limit = datetime.now() - timedelta(hours=6)
+        stations = db.session.query(BatchSubmission.station).filter(
+            BatchSubmission.station.like('%, ' + system),
+            BatchSubmission.when >= date_limit,
+        ).distinct()
+        for st, in stations.all():
+            if st == station:
+                continue
+            bs = BatchSubmission.query.filter_by(station=st).order_by(BatchSubmission.when.desc()).first()
+            factor = max(o.factor for o in bs.readings)
+            st = st.split(', ')[0]
+            factors[st] = factor
+    response['system_factors'] = factors
   
     db.session.commit()
-    return jsonify({'character': token.character.name, 'recorded': True, 'factor': max(factors)})
+
+    return jsonify(response)
 
 @app.route('/v1/stations')
 def list_stations():
