@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
@@ -39,3 +40,16 @@ class TaskReading(db.Model):
     career_task_id = db.Column(db.ForeignKey('career_task.id'), nullable=False)
     career_task = db.relationship('CareerTask', backref='readings')
     bonus = db.Column(db.Float(), nullable=False)
+
+    @property
+    def factor(self):
+        baseline = self.career_task.bonus_baseline
+        if baseline is None:
+            baseline = db.session.query(func.min(TaskReading.bonus)).filter_by(career_task_id=self.career_task_id).first()
+            if baseline is None:
+                return None
+            baseline = baseline[0]
+            self.career_task.bonus_baseline = baseline
+            db.session.add(self.career_task)
+
+        return self.bonus / baseline
