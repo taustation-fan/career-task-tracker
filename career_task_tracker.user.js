@@ -48,16 +48,16 @@
     let options = userscript_preferences( pref_specs() );
 
     if (station && window.location.pathname.match('^/career')) {
-
-        if ( !window.location.pathname.match('^/career') ) {
-            return;
-        }
         var token = options.token;
         if (!token) {
             status_message('Please configure your access token in the user preferences');
             return;
         }
 
+        if ($('#employment-nav-heading').length == 0) {
+            status_message('Cannot extract all necessary data while the "Current Ventures" box is missing');
+            return;
+        }
         var career_chunks = $('div#employment_panel').find('li:Contains("Career")').find('a').text().trim().split(' - ');
         var career = career_chunks[0];
         var rank = career_chunks[1];
