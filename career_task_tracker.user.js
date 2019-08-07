@@ -94,9 +94,9 @@
             data: JSON.stringify(payload),
             success: function(response) {
                 if (response.recorded) {
-                    let message = 'tasks successfully recorded. +1 brownie point!';
+                    let message = 'Tasks recorded. +1 brownie point!';
                     if (response.factor) {
-                        message += " Current factor: " + format_float(response.factor) + '. ';
+                        message += " <b>Current factor: " + format_float(response.factor) + '.</b> ';
                     }
                     if (response.system_factors) {
                         let thead = '<thead><tr><th>Station</th><th>Factor</th></tr></thead>';
