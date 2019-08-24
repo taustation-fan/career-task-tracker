@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from flask import Flask, request, jsonify
@@ -93,6 +94,37 @@ def add_entry():
     db.session.commit()
 
     return jsonify(response)
+
+@app.route('/v1/summary')
+def summary():
+    token_str = request.args.get('token')
+    assert token_str, 'Missing token'
+    token = Token.query.filter_by(token=token_str).first()
+    assert token, 'Invalid token'
+    assert token.full_read_permission, 'Permission denied'
+
+    stations = db.session.query(BatchSubmission.station).filter(BatchSubmission.factor != None).order_by(BatchSubmission.station).distinct()
+
+    factors = defaultdict(dict) # factors = {'YC Ceti': {'Cape Verde Stronghold': 1.25}}
+
+    for station, in stations:
+        bs = BatchSubmission.query.filter_by(station=station).filter(BatchSubmission.factor != None).order_by(BatchSubmission.when.desc()).first()
+        if not bs:
+            continue
+        if (datetime.now() - bs.when).total_seconds() > 6 * 3600:
+            continue
+        local_station, system = bs.station.split(', ')
+        system = system.replace(' system', '')
+        factors[system][local_station] = bs.factor
+
+    result = ''
+    for system in sorted(factors.keys()):
+        for station in sorted(factors[system].keys()):
+            factor = factors[system][station]
+            result += '{:.2f}  {:20} {:30}\n'.format(factor, system, station)
+
+    return result
+            
 
 @app.route('/v1/stations')
 def list_stations():

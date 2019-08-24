@@ -15,6 +15,7 @@ class Token(db.Model):
     infotext = db.Column(db.String(250))
     character_id = db.Column(db.ForeignKey('character.id'), nullable=False)
     character = db.relationship('Character', backref=db.backref('tokens', lazy=True))
+    full_read_permission = db.Column(db.Boolean(), nullable=False, default=False)
 
 class BatchSubmission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
