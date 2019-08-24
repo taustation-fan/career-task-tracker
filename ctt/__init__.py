@@ -65,9 +65,11 @@ def add_entry():
         )
         db.session.add(tr)
         factors.append(tr.factor)
+    factor = max(factors);
+    batch.factor = factor
 
     response['recorded'] = True
-    response['factor'] = max(factors)
+    response['factor'] = factor
     factors = {}
     if ', ' in station:
         local_station, system = station.split(', ', 2)

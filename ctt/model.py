@@ -26,6 +26,7 @@ class BatchSubmission(db.Model):
     career = db.Column(db.String(140), nullable=False)
     rank = db.Column(db.String(140), nullable=False)
     station = db.Column(db.String(250), nullable=False)
+    factor = db.Column(db.Float())
 
 class CareerTask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
