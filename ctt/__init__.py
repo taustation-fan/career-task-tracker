@@ -2,7 +2,7 @@ import os
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -123,7 +123,7 @@ def summary():
             factor = factors[system][station]
             result += '{:.2f}  {:20} {:30}\n'.format(factor, system, station)
 
-    return result
+    return Response(result, mimetype='text/plain')
             
 
 @app.route('/v1/stations')
