@@ -67,6 +67,8 @@ def add_entry():
         factors.append(tr.factor)
     factor = max(factors);
     batch.factor = factor
+    if factor:
+        print('Recorded factor {} for station {}, {}'.format(factor, station, datetime.now()))
 
     response['recorded'] = True
     response['factor'] = factor
@@ -89,8 +91,6 @@ def add_entry():
         response['system_factors'] = factors
   
     db.session.commit()
-    if factor:
-        print('Recorded factor {} for station {}, {}'.format(factor, station, datetime.now()))
 
     return jsonify(response)
 
