@@ -33,6 +33,8 @@ def add_entry():
     token = Token.query.filter_by(token=token_str).first()
     if token is None:
         return jsonify({'recorded': False, 'message': 'Invalid token'})
+    if 'Confined to the' in station or 'Doing activity' in station:
+        return jsonify({'recorded': False, 'message': '{} does not look like a valid station name'.format(station)})
     batch = BatchSubmission(
         token=token,
         character=token.character,
